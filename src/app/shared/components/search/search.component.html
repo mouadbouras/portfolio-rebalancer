@@ -1,0 +1,19 @@
+<!-- Search form -->
+<form class="form-inline md-form form-sm active-cyan-2 mt-2">
+    <input  [(ngModel)]="searchInput" 
+            (keydown.enter)="search()"
+            name="search" class="form-control form-control-sm mr-3 w-75" type="text" placeholder="Search"
+            aria-label="Search">
+    <i  (click)="search()"
+        class="fas fa-search" aria-hidden="true"></i>
+
+    <div *ngIf="securities$ | async" 
+        class="list-group list-group-flush">
+        <button *ngFor="let security of securities$ | async;"
+                type="button" class="list-group-item list-group-item-action">
+                {{ security.description  }}  
+        </button>
+    </div>
+</form>
+
+

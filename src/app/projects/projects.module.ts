@@ -4,7 +4,6 @@ import { ProjectsComponent } from './containers/projects.component';
 import { StoreModule } from '@ngrx/store';
 import { HttpClientModule } from '@angular/common/http';
 import { ButtonsModule, InputsModule, CardsModule, WavesModule, IconsModule, ModalModule } from 'angular-bootstrap-md';
-
 import * as fromProjects from './store/projects.reducer';
 import { EffectsModule } from '@ngrx/effects';
 import { ProjectsEffects } from './store/projects.effects';

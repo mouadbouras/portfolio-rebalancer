@@ -15,6 +15,7 @@ const routes: Routes = [
     { path: 'projects', loadChildren: './projects/projects.module#ProjectsModule', canActivate: [AuthGuard]},
     { path: 'customers', loadChildren: './customers/customers.module#CustomersModule', canActivate: [AuthGuard]},
     { path: 'profile', loadChildren: './profile/profile.module#ProfileModule', canActivate: [AuthGuard] },
+    { path: 'portfolios', loadChildren: './portfolios/portfolios.module#PortfoliosModule', canActivate: [AuthGuard] },
     { path: 'charts', loadChildren: './charts/charts.module#ChartsDataModule', canActivate: [AuthGuard] },
     { path: 'admin-panel', component: AdminComponent, canActivate: [AdminGuard]}
   ]},

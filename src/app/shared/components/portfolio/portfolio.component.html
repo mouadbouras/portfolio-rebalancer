@@ -1,0 +1,31 @@
+<mdb-card>
+  <!--Card image-->
+  <!-- <mdb-card-img *ngIf="project.photoUrl" src="{{ project.photoUrl }}" alt="Card image cap" class="waves-light"
+    mdbWavesEffect></mdb-card-img> -->
+  <!-- <mdb-card-img *ngIf="!project.photoUrl" src="https://mdbootstrap.com/img/Photos/Lightbox/Thumbnail/img%20(97).jpg" alt="Card image cap"></mdb-card-img> -->
+  <!--Card content-->
+  <mdb-card-body>
+
+    <!--Title-->
+    <mdb-card-title>
+      <h4>{{ portfolio.name }}</h4>
+    </mdb-card-title>
+
+    <!--Text-->
+    <mdb-card-text class="mt-5"> 
+      {{ portfolio.investment }}
+    </mdb-card-text>
+
+    <app-search class="mt-3">
+    </app-search>
+    
+    <app-securities-list [securities]='portfolio.securities' 
+      class="mt-5">
+    </app-securities-list>
+
+    <div class="text-left">
+      <a *ngIf="editable" mdbBtn color="primary" mdbWavesEffect (click)="onEdit()">Edit</a>
+      <a mdbBtn class="red lighten-1 white-text" mdbWavesEffect (click)="onDelete()">Delete</a>
+    </div>
+  </mdb-card-body>
+</mdb-card>

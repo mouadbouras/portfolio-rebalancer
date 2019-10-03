@@ -1,0 +1,28 @@
+<div class="modal-content">
+  <div class="modal-header">
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">×</span>
+    </button>
+    <h4 class="modal-title w-200" id="myModalLabel">{{ heading }}</h4>
+  </div>
+  <div class="modal-body">
+    <form #portfolioForm="ngForm">
+      <div class="md-form">
+        <input type="text" class="form-control" name="name" [(ngModel)]="portfolio.name" mdbInput mdbValidate [validateSuccess]="false" #name="ngModel" required>
+        <label for="name">Name</label>
+        <mdb-error *ngIf="name && name.invalid && (name.dirty || name.touched)">Name is required</mdb-error>
+      </div>
+
+      <div class="md-form">
+        <input type="text" id="investment" class="form-control" name="investment" [(ngModel)]="portfolio.investment" mdbInput mdbValidate [validateSuccess]="false" #investment="ngModel" required>
+        <label for="investment">Investment</label>
+        <mdb-error *ngIf="investment && investment.invalid && (investment.dirty || investment.touched)">Investment is required</mdb-error>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" mdbBtn color="white" class="black-text waves-light" aria-label="Close" (click)="modalRef.hide()"
+      mdbWavesEffect>Close</button>
+    <button type="button" mdbBtn color="primary" class="relative waves-light" mdbWavesEffect (click)="onSave()">Save!</button>
+  </div>
+</div>

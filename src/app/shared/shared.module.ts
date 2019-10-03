@@ -14,6 +14,11 @@ import { FormsModule } from '@angular/forms';
 import { ProjectComponent } from './components/project/project.component';
 import { ProjectsListComponent } from './components/projects-list/projects-list.component';
 import { CustomersListComponent } from './components/customers-list/customers-list.component';
+import { PortfolioComponent } from './components/portfolio/portfolio.component';
+import { PortfolioListComponent } from './components/portfolio-list/portfolio-list.component';
+import { PortfolioModalComponent } from './components/portfolio-modal/portfolio-modal.component';
+import { SecuritiesListComponent } from './components/security-list/securities-list.component';
+import { SearchComponent } from './components/search/search.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +27,12 @@ import { CustomersListComponent } from './components/customers-list/customers-li
     ProjectModalComponent,
     ProjectsListComponent,
     ProjectComponent,
-    CustomersListComponent
+    CustomersListComponent,
+    PortfolioComponent,
+    PortfolioListComponent,
+    PortfolioModalComponent,
+    SecuritiesListComponent,
+    SearchComponent
   ],
   imports: [
     CommonModule,
@@ -33,12 +43,13 @@ import { CustomersListComponent } from './components/customers-list/customers-li
     ButtonsModule,
     CardsModule
   ],
-  exports: [ProjectsListComponent, ProjectComponent, CustomersListComponent],
+  exports: [ProjectsListComponent, PortfolioListComponent, ProjectComponent, CustomersListComponent],
   providers: [],
   entryComponents: [
     ConfirmModalComponent,
     CustomersModalComponent,
-    ProjectModalComponent
+    ProjectModalComponent,
+    PortfolioModalComponent
   ]
 })
 export class SharedModule {}
