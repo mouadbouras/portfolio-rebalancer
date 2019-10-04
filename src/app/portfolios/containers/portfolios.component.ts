@@ -10,7 +10,6 @@ import { map, take } from 'rxjs/operators';
 import * as fromPortfolios from './../store/portfolios.actions';
 import { ConfirmModalComponent } from '../../shared/components/confirm-modal/confirm-modal.component';
 import { PortfolioModalComponent } from '../../shared/components/portfolio-modal/portfolio-modal.component';
-import { Security } from '../model/security.model';
 
 @Component({
   selector: 'app-portfolios',
@@ -36,7 +35,6 @@ export class PortfoliosComponent implements OnInit {
         if (this.user && !portfolios) {
           this.store.dispatch(new fromPortfolios.PortfoliosQuery());
         }
-        console.log(portfolios);
         return portfolios;
       })
     );
@@ -53,18 +51,6 @@ export class PortfoliosComponent implements OnInit {
 
     this.modalRef.content.portfolioData.pipe(
       take(1),
-      map((portfolio: Portfolio) => {
-        portfolio.securities = [{
-          name: 'google',
-          symbol: 'goog',
-          price: 100,
-          currency: 'US',
-          usPrice: 80,
-          percentage: 100,
-        } as Security];
-
-        return portfolio;
-      }),
     ).subscribe( (portfolioData: Portfolio) => {
       this.store.dispatch(new fromPortfolios.PortfolioAdded({ portfolio: portfolioData }));
     });
@@ -75,7 +61,9 @@ export class PortfoliosComponent implements OnInit {
 
     this.modalRef.content.heading = 'Edit portfolio';
     const portfolioCopy = {...portfolio };
+    const securitiesCopy = portfolioCopy.securities;
     this.modalRef.content.portfolio = portfolioCopy;
+    this.modalRef.content.securities = securitiesCopy;
 
     this.modalRef.content.portfolioData.pipe(take(1)).subscribe( (portfolioData: Portfolio) => {
       this.store.dispatch(new fromPortfolios.PortfolioEdited({ portfolio: portfolioData }));
@@ -93,11 +81,14 @@ export class PortfoliosComponent implements OnInit {
   }
 
   onPortfolioDelete(portfolio: Portfolio) {
-    console.log('testttter');
     this.openConfirmModal(portfolio);
   }
 
   onPortfolioEdit(portfolio: Portfolio) {
     this.openEditPortfolioModal(portfolio);
+  }
+
+  onPortfolioSecuritiesEdited(portfolio: Portfolio) {
+    this.store.dispatch(new fromPortfolios.PortfolioEdited({ portfolio: portfolio }));
   }
 }

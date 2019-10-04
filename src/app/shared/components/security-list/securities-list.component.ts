@@ -11,9 +11,6 @@ export class SecuritiesListComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit() {
-    console.log('log');
-    console.log(this.securities);
-  }
+  ngOnInit() {  }
 
 }

@@ -11,15 +11,18 @@ export class PortfolioComponent implements OnInit {
   @Input() editable = true;
   @Output() deleted = new EventEmitter<Portfolio>();
   @Output() edited = new EventEmitter<Portfolio>();
+  @Output() securitiesEdited = new EventEmitter<Portfolio>();
 
   constructor() { }
 
-  ngOnInit() {
-    console.log('le');
-    console.log(this.portfolio);
-    console.log('le');
+  ngOnInit() {  }
 
-  }
+  // onAddSecurity(security: Security) {
+  //   if (this.portfolio.securities) {
+  //     this.portfolio.securities.push(security);
+  //   }
+  //   this.onSecuritiesEdit();
+  // }
 
   onDelete() {
     this.deleted.emit(this.portfolio);
@@ -29,4 +32,7 @@ export class PortfolioComponent implements OnInit {
     this.edited.emit(this.portfolio);
   }
 
+  onSecuritiesEdit() {
+    this.securitiesEdited.emit(this.portfolio);
+  }
 }

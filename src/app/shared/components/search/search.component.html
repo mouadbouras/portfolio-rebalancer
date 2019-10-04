@@ -1,17 +1,34 @@
 <!-- Search form -->
-<form class="form-inline md-form form-sm active-cyan-2 mt-2">
-    <input  [(ngModel)]="searchInput" 
-            (keydown.enter)="search()"
-            name="search" class="form-control form-control-sm mr-3 w-75" type="text" placeholder="Search"
-            aria-label="Search">
-    <i  (click)="search()"
-        class="fas fa-search" aria-hidden="true"></i>
 
+<form class="md-form form-sm active-cyan-2 mt-2">
+    <div class="d-flex align-items-center">
+        <div class="p-2 flex-grow-1">
+            <input [(ngModel)]="searchInput" 
+                   (keydown.enter)="search()"
+                   name="search" class="form-control form-control-sm mr-3 " type="text" placeholder="Search"
+                   aria-label="Search">
+        </div>
+        <div class="ml-auto p-2">
+            <i (click)="search()"
+                class="fas fa-search" aria-hidden="true">
+            </i>
+        </div>
+    </div>
+    <div *ngIf="noResultsFound" 
+            class="alert alert-light" role="alert">
+        No results found!
+    </div>
     <div *ngIf="securities$ | async" 
         class="list-group list-group-flush">
         <button *ngFor="let security of securities$ | async;"
-                type="button" class="list-group-item list-group-item-action">
-                {{ security.description  }}  
+                (click)="selectSecurity(security)"
+                type="button" class="list-group-item list-group-item-action d-flex justify-content-between">
+            <div>
+            {{ security.description  }}  
+            </div>
+            <div>
+                <i class="fas fa-plus"></i>
+            </div>
         </button>
     </div>
 </form>

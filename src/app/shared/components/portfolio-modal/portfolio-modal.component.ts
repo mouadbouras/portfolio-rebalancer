@@ -29,12 +29,20 @@ export class PortfolioModalComponent implements OnInit {
 
   onSave() {
     if (this.portfolioForm.valid) {
+      this.portfolio.securities = this.securities;
       this.portfolioData.next(this.portfolio);
-    this.modalRef.hide();
+      this.modalRef.hide();
     } else {
       const controls = this.portfolioForm.controls;
       Object.keys(controls).forEach( controlName => controls[controlName].markAsTouched());
     }
   }
 
+  onAddSecurity(security: Security) {
+      if (!this.securities) {
+        this.securities = [];
+      }
+
+      this.securities.push(security);
+  }
 }

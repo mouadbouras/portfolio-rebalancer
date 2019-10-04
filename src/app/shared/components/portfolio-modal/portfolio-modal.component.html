@@ -18,6 +18,16 @@
         <label for="investment">Investment</label>
         <mdb-error *ngIf="investment && investment.invalid && (investment.dirty || investment.touched)">Investment is required</mdb-error>
       </div>
+
+      <app-search (securitySelected)="onAddSecurity($event)"
+                  class="mt-3">
+      </app-search>
+
+      <app-securities-list 
+        [securities]='securities' 
+        class="mt-5">
+      </app-securities-list>
+
     </form>
   </div>
   <div class="modal-footer">

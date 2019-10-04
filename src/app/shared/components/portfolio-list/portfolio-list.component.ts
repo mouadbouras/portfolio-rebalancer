@@ -11,6 +11,7 @@ export class PortfolioListComponent implements OnInit {
   @Input() editable = true;
   @Output() portfolioDeleted = new EventEmitter<Portfolio>();
   @Output() portfolioEdited = new EventEmitter<Portfolio>();
+  @Output() portfolioSecuritiesEdited = new EventEmitter<Portfolio>();
 
   constructor() { }
 
@@ -23,6 +24,10 @@ export class PortfolioListComponent implements OnInit {
 
   onPortfolioEdit(portfolio: Portfolio) {
     this.portfolioEdited.emit(portfolio);
+  }
+
+  onPortfolioSecuritiesEdit(portfolio: Portfolio) {
+    this.portfolioSecuritiesEdited.emit(portfolio);
   }
 
   trackByFunction(index: any) {
