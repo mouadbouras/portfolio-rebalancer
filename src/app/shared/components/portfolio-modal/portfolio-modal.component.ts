@@ -25,6 +25,12 @@ export class PortfolioModalComponent implements OnInit {
   constructor(public modalRef: MDBModalRef) {}
 
   ngOnInit() {
+    if (!this.portfolio.securities) {
+      this.portfolio.securities = [{}];
+    }
+    if (!this.securities) {
+      this.securities = [];
+    }
   }
 
   onSave() {

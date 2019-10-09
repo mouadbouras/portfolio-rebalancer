@@ -51,7 +51,7 @@ export class PortfoliosComponent implements OnInit {
 
     this.modalRef.content.portfolioData.pipe(
       take(1),
-    ).subscribe( (portfolioData: Portfolio) => {
+    ).subscribe((portfolioData: Portfolio) => {
       this.store.dispatch(new fromPortfolios.PortfolioAdded({ portfolio: portfolioData }));
     });
   }

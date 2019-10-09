@@ -1,7 +1,6 @@
 import { Component, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { Observable, SubscriptionLike } from 'rxjs';
 import { AlphaVantageSecurity } from '../../models/search-response.model';
-//import { TradierService } from '../../services/tradier.service';
 import { Security } from '../../../portfolios/model/security.model';
 import { map, tap } from 'rxjs/operators';
 import { AlphavantageService } from '../../services/alphavantage.service';
@@ -23,7 +22,6 @@ export class SearchComponent implements OnDestroy {
   public isLoading: boolean = false;
 
   constructor(
-    //private _tradierService: TradierService,
     private _alphavantageService: AlphavantageService,
   ) { }
 
@@ -36,22 +34,16 @@ export class SearchComponent implements OnDestroy {
   public search() {
     this.noResultsFound = false;
     if (this.searchInput.trim() !== '') {
-      // this.securities$ = this._tradierService.searchSymbol(this.searchInput)
-      // .pipe(
-      //   tap(securities => {
-      //     if (securities.length === 0) {
-      //       this.noResultsFound = true;
-      //     }
-      //   })
-      // );
       this.isLoading = true;
       this.securities$ = this._alphavantageService.searchSymbol(this.searchInput).pipe(
-        tap( () => {
+        tap(securities => {
+          if (securities.length === 0) {
+             this.noResultsFound = true;
+          }
           this.isLoading = false;
         })
       );
     }
-
   }
 
   public selectSecurity(security: AlphaVantageSecurity): void {
