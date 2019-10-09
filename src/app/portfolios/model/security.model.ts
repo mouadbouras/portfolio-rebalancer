@@ -5,4 +5,5 @@ export interface Security {
     currency?: string;
     usPrice?: number;
     percentage?: number;
+    count?: number;
   }
