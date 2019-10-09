@@ -18,8 +18,13 @@
           <td>{{ security.price }}</td>
           <td>{{ security.currency }}</td>
           <td>{{ security.usPrice }}$</td>
-          <td>{{ security.percentage }} %</td>
-
+          <td *ngIf="!editable; else edit">{{ security.percentage }} %</td>
+          <ng-template #edit>
+            <td>
+              <input type="text" class="form-control" name="percent"
+                     [(ngModel)]="security.percentage" mdbInput  #name="ngModel" required>
+            </td>
+          </ng-template>
           <!-- <td>
             <a (click)="onEdit(customer)" class="mr-2"><mdb-icon fas icon="edit"></mdb-icon></a>
             <a (click)="onDelete(customer)"><mdb-icon fas icon="trash"></mdb-icon></a>

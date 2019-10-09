@@ -8,6 +8,7 @@ import { Security } from 'src/app/portfolios/model/security.model';
 })
 export class SecuritiesListComponent implements OnInit {
   @Input() securities: Security[];
+  @Input() editable: boolean = false;
 
   constructor() { }
 
