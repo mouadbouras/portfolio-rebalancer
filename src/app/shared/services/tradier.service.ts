@@ -4,6 +4,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { TradierSearchResponse, TradierSecurity, TradierSecurities } from '../models/search-response.model';
 import { map } from 'rxjs/operators';
+import { TradierQuote, TradierQuoteResponse, TradierQuotes } from '../models/quote-response.model';
 
 @Injectable({
   providedIn: 'root'

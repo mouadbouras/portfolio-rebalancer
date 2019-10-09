@@ -1,12 +1,12 @@
-interface TradierQuoteResponse {
+export interface TradierQuoteResponse {
     quotes: TradierQuotes;
   }
 
-  interface TradierQuotes {
-    quote: TradierQuote[];
-  }
+  export interface TradierQuotes {
+  quote: TradierQuote[];
+}
 
-  interface TradierQuote {
+export  interface TradierQuote {
     symbol: string;
     description: string;
     exch: string;
@@ -43,4 +43,17 @@ interface TradierQuoteResponse {
     option_type?: string;
     root_symbol?: string;
   }
-  
+
+  export   interface AlphaVantageQuote {
+    symbol: string;
+    open: string;
+    high: string;
+    low: string;
+    price: string;
+    volume: string;
+    latest_trading_day: string;
+    previous_close: string;
+    change: string;
+    change_percent: string;
+}
+
