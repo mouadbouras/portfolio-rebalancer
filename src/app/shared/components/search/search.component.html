@@ -18,13 +18,18 @@
             class="alert alert-light" role="alert">
         No results found!
     </div>
+    <div *ngIf="isLoading" class="d-flex justify-content-center align-items-center" >
+        <div class="spinner-grow text-primary" role="status" style="width: 2rem; height: 2rem;">
+          <span class="sr-only">Loading...</span>
+        </div>
+    </div>
     <div *ngIf="securities$ | async" 
         class="list-group list-group-flush">
         <button *ngFor="let security of securities$ | async;"
                 (click)="selectSecurity(security)"
                 type="button" class="list-group-item list-group-item-action d-flex justify-content-between">
             <div>
-            {{ security.description  }}  
+            {{ security.symbol  }} - {{ security.name  }}  
             </div>
             <div>
                 <i class="fas fa-plus"></i>
