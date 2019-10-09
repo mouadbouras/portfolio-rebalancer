@@ -12,6 +12,7 @@ export class PortfolioComponent implements OnInit {
   @Output() deleted = new EventEmitter<Portfolio>();
   @Output() edited = new EventEmitter<Portfolio>();
   @Output() securitiesEdited = new EventEmitter<Portfolio>();
+  @Output() portfolioRebalance = new EventEmitter<Portfolio>();
 
   constructor() { }
 
@@ -34,5 +35,9 @@ export class PortfolioComponent implements OnInit {
 
   onSecuritiesEdit() {
     this.securitiesEdited.emit(this.portfolio);
+  }
+
+  onRebalance() {
+    this.portfolioRebalance.emit(this.portfolio);
   }
 }

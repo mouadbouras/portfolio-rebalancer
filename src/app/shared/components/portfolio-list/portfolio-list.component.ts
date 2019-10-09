@@ -12,6 +12,7 @@ export class PortfolioListComponent implements OnInit {
   @Output() portfolioDeleted = new EventEmitter<Portfolio>();
   @Output() portfolioEdited = new EventEmitter<Portfolio>();
   @Output() portfolioSecuritiesEdited = new EventEmitter<Portfolio>();
+  @Output() portfolioRebalance = new EventEmitter<Portfolio>();
 
   constructor() { }
 
@@ -28,6 +29,10 @@ export class PortfolioListComponent implements OnInit {
 
   onPortfolioSecuritiesEdit(portfolio: Portfolio) {
     this.portfolioSecuritiesEdited.emit(portfolio);
+  }
+
+  onPortfolioRebalance(portfolio: Portfolio) {
+    this.portfolioRebalance.emit(portfolio);
   }
 
   trackByFunction(index: any) {

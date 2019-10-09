@@ -22,6 +22,7 @@
 
     <div class="text-left">
       <a *ngIf="editable" mdbBtn color="primary" mdbWavesEffect (click)="onEdit()">Edit</a>
+      <a *ngIf="editable" mdbBtn color="success" mdbWavesEffect (click)="onRebalance()">Rebalance</a>
       <a mdbBtn class="red lighten-1 white-text" mdbWavesEffect (click)="onDelete()">Delete</a>
     </div>
   </mdb-card-body>
