@@ -22,7 +22,7 @@ export class PortfoliosComponent implements OnInit {
   modalRef: MDBModalRef;
 
   modalConfig = {
-    class: 'modal-dialog-centered'
+    class: 'modal-dialog-scrollable modal-lg'
   };
 
   constructor(private store: Store<AppState>, private modalService: MDBModalService, private afAuth: AngularFireAuth) { }
@@ -90,5 +90,10 @@ export class PortfoliosComponent implements OnInit {
 
   onPortfolioSecuritiesEdited(portfolio: Portfolio) {
     this.store.dispatch(new fromPortfolios.PortfolioEdited({ portfolio: portfolio }));
+  }
+
+  onPortfolioRebalance(portfolio: Portfolio) {
+    console.log('rebalance');
+    console.log(portfolio);
   }
 }
