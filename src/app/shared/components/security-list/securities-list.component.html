@@ -1,4 +1,4 @@
-<div *ngIf="securities && securities.length > 0" class="z-depth-1">
+<div *ngIf="securities && securities.length > 0" class="z-depth-1 overflow-auto">
     <table class="table table-striped table-responsive-md btn-table" mdbTable borderless="true">
       <thead style="background-color: transparent">
         <tr>
@@ -9,6 +9,8 @@
           <th>USD</th>
           <th>Percent</th>
           <th>Count</th>
+          <th>$ Equivalent</th>
+          <th>Actions</th>
         </tr>
       </thead>
   
@@ -16,21 +18,22 @@
         <tr *ngFor="let security of securities; trackBy: trackByFn">
           <th scope="row">{{ security.symbol }}</th>
           <td>{{ security.name }}</td>
-          <td>{{ security.price }}</td>
+          <td>{{security.price | currency:security.currency }}</td>
           <td>{{ security.currency }}</td>
-          <td>{{ security.usPrice }}$</td>
+          <td>{{ security.usPrice | currency }}</td>
           <td *ngIf="!editable; else edit">{{ security.percentage }} %</td>
           <ng-template #edit>
             <td>
-              <input type="text" class="form-control" name="percent"
+              <input type="number" min="0" max="100" class="form-control" name="percent"
                      [(ngModel)]="security.percentage" mdbInput  #name="ngModel" required>
             </td>
           </ng-template>
           <td>{{ security.count }}</td>
-          <!-- <td>
-            <a (click)="onEdit(customer)" class="mr-2"><mdb-icon fas icon="edit"></mdb-icon></a>
-            <a (click)="onDelete(customer)"><mdb-icon fas icon="trash"></mdb-icon></a>
-          </td> -->
+          <td>{{ (security.count * security.usPrice) | currency}}</td>
+          <td class="text-center">
+            <!-- <a (click)="onEdit(customer)" class="mr-2"><mdb-icon fas icon="edit"></mdb-icon></a> -->
+            <a (click)="onDelete(security)" class="text-center"><mdb-icon fas icon="trash"></mdb-icon></a>
+          </td>
         </tr>
       </tbody>
     </table>

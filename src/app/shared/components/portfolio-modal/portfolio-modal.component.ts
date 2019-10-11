@@ -44,6 +44,10 @@ export class PortfolioModalComponent implements OnInit {
     }
   }
 
+  onDeleteSecurity(security: Security) {
+    this.securities = this.securities.filter((v) => v !== security);
+  }
+
   onAddSecurity(security: Security) {
       if (!this.securities) {
         this.securities = [];

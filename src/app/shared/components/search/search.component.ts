@@ -47,7 +47,6 @@ export class SearchComponent implements OnDestroy {
   }
 
   public selectSecurity(security: AlphaVantageSecurity): void {
-    this.securities$ = new Observable<AlphaVantageSecurity[]>();
     this._subscription = this._alphavantageService.getQuoteForSymbol(security.symbol).pipe(
       tap(console.log),
       map((quote: AlphaVantageQuote) => {
@@ -57,10 +56,13 @@ export class SearchComponent implements OnDestroy {
           price: quote.price,
           currency: security.currency,
           usPrice: quote.price,
+          percentage: 0,
+          count: 0,
         } as unknown as Security;
       }),
       tap(console.log),
       tap((security: Security) => {
+        this.securities$ = new Observable<AlphaVantageSecurity[]>();
         this.securitySelected.emit(security);
       }
       ),

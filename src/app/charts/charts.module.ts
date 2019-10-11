@@ -25,6 +25,6 @@ import { PieChartComponent } from './components/pie-chart/pie-chart.component';
     EffectsModule.forFeature([ChartsEffects])
   ],
   declarations: [ChartsComponent, LineChartComponent, BarChartComponent, DoughnutChartComponent, PieChartComponent],
-  exports: [ChartsComponent, LineChartComponent]
+  exports: [ChartsComponent, LineChartComponent, PieChartComponent]
 })
 export class ChartsDataModule { }

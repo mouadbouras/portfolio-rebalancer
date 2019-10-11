@@ -14,8 +14,16 @@
       </div>
 
       <div class="md-form">
-        <input type="text" id="investment" class="form-control" name="investment" [(ngModel)]="portfolio.investment" mdbInput mdbValidate [validateSuccess]="false" #investment="ngModel" required>
-        <label for="investment">Investment</label>
+        <!-- <input type="text" id="investment" class="form-control" name="investment" [(ngModel)]="portfolio.investment" mdbInput mdbValidate [validateSuccess]="false" #investment="ngModel" required> -->
+        <div class="md-form input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text md-addon">$</span>
+          </div>
+          <input type="number" id="investment" placeholder="Investment" class="form-control" name="investment" [(ngModel)]="portfolio.investment" mdbInput mdbValidate [validateSuccess]="false" #investment="ngModel" required>
+          <div class="input-group-append">
+            <span class="input-group-text md-addon">.00</span>
+          </div>
+        </div>
         <mdb-error *ngIf="investment && investment.invalid && (investment.dirty || investment.touched)">Investment is required</mdb-error>
       </div>
 
@@ -25,7 +33,8 @@
 
       <app-securities-list
         [editable]='true'
-        [securities]='securities' 
+        [securities]='securities'
+        (deleteSecurity)='onDeleteSecurity($event)'
         class="mt-5">
       </app-securities-list>
 

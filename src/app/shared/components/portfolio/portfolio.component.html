@@ -1,4 +1,4 @@
-<mdb-card>
+<mdb-card >
   <!--Card image-->
   <!-- <mdb-card-img *ngIf="project.photoUrl" src="{{ project.photoUrl }}" alt="Card image cap" class="waves-light"
     mdbWavesEffect></mdb-card-img> -->
@@ -12,13 +12,24 @@
     </mdb-card-title>
 
     <!--Text-->
-    <mdb-card-text class="mt-5"> 
-      {{ portfolio.investment }}
+    <mdb-card-text class="mt-3">       
+      <p class="display-4">{{ portfolio.investment | currency }}</p>
     </mdb-card-text>
 
-    <app-securities-list [securities]='portfolio.securities' 
-      class="mt-5">
+    <div *ngIf="overHunderPercentFlag" 
+      class="alert alert-danger mt-3" role="alert">
+        The sum of allocations <b>{{ overHunderPercentValue }}%</b> is over 100%
+    </div>
+
+    <app-securities-list
+     [securities]='portfolio.securities' 
+     (deleteSecurity)='onDeleteSecurity($event)'
+      class="mt-3 overflow-auto card">
     </app-securities-list>
+
+    <mdb-card-text *ngIf="leftoverCash > 0" class="my-3">       
+        <h5>Leftover Cash : {{ leftoverCash | currency }}</h5>
+      </mdb-card-text>
 
     <div class="text-left">
       <a *ngIf="editable" mdbBtn color="primary" mdbWavesEffect (click)="onEdit()">Edit</a>
