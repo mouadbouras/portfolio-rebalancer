@@ -11,6 +11,7 @@ import * as fromPortfolios from './../store/portfolios.actions';
 import { ConfirmModalComponent } from '../../shared/components/confirm-modal/confirm-modal.component';
 import { PortfolioModalComponent } from '../../shared/components/portfolio-modal/portfolio-modal.component';
 import { AlphavantageService } from 'src/app/shared/services/alphavantage.service';
+import { AlphaVantageQuote } from 'src/app/shared/quote-response.model';
 import { ExchangeRate } from '../model/exchange.model';
 import { Security } from '../model/security.model';
 
@@ -25,7 +26,8 @@ export class PortfoliosComponent implements OnInit, OnDestroy {
   modalRef: MDBModalRef;
   currencyExchange: { [key: string]: ExchangeRate};
   rates: {[key: string]: Observable<any>};
-  subscriptions: SubscriptionLike[];
+  rebalanceSubscriptions: SubscriptionLike[];
+  refreshSubscriptions: SubscriptionLike[];
 
   modalConfig = {
     class: 'modal-dialog-scrollable modal-xl'
@@ -39,6 +41,27 @@ export class PortfoliosComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
+    this.loadPortfolios();
+    this.currencyExchange = {};
+    this.rebalanceSubscriptions = [];
+    this.refreshSubscriptions = [];
+    this.rates = {};
+  }
+
+  ngOnDestroy(): void {
+    for (const subscription of this.rebalanceSubscriptions) {
+      subscription.unsubscribe();
+    }
+    for (const subscription of this.refreshSubscriptions) {
+      subscription.unsubscribe();
+    }
+  }
+
+  get user() {
+    return this.afAuth.auth.currentUser;
+  }
+
+  loadPortfolios() {
     this.isLoading$ = this.store.select(getAllLoaded);
     this.portfolios$ = this.store.pipe(
       select(getPortfolios),
@@ -49,20 +72,6 @@ export class PortfoliosComponent implements OnInit, OnDestroy {
         return portfolios;
       })
     );
-
-    this.currencyExchange = {};
-    this.subscriptions = [];
-    this.rates = {};
-  }
-
-  ngOnDestroy(): void {
-    for (const subscription of this.subscriptions) {
-      subscription.unsubscribe();
-    }
-  }
-
-  get user() {
-    return this.afAuth.auth.currentUser;
   }
 
   openAddPortfolioModal() {
@@ -115,18 +124,19 @@ export class PortfoliosComponent implements OnInit, OnDestroy {
 
   onPortfolioRebalance(portfolio: Portfolio) {
     if (portfolio && portfolio.securities) {
-      for (const security of portfolio.securities) {
-        if (security.currency && !this.rates[security.currency]) {
-          this.rates[security.currency] = this.alphavantageService.getCurrencyExchange(security.currency, 'USD');
-        }
-      }
+    //   for (const security of portfolio.securities) {
+    //     if (security.currency && !this.rates[security.currency]) {
+    //       this.rates[security.currency] = this.alphavantageService.getCurrencyExchange(security.currency, 'USD');
+    //     }
+    //   }
 
-      this.subscriptions.push(forkJoin(this.rates).pipe(
-        tap(console.log),
-        tap(rates => {
-          this.rebalancePortfolio(portfolio, rates);
-        })
-      ).subscribe());
+    //   this.subscriptions.push(forkJoin(this.rates).pipe(
+    //     tap(console.log),
+    //     tap(rates => {
+    //       this.rebalancePortfolio(portfolio, rates);
+    //     })
+    //   ).subscribe());
+    this.refreshPortfolio(portfolio);
     }
   }
 
@@ -151,5 +161,21 @@ export class PortfoliosComponent implements OnInit, OnDestroy {
     }
 
     this.store.dispatch(new fromPortfolios.PortfolioEdited({ portfolio: portfolioCopy }));
+  }
+
+  refreshPortfolio(portfolio: Portfolio) {
+    //const portfolioCopy = JSON.parse(JSON.stringify(portfolio));
+    for (const security of portfolio.securities) {
+      this.refreshSubscriptions.push(this.alphavantageService.getQuoteForSymbol(security.symbol).pipe(
+        tap((response: AlphaVantageQuote) => {
+          security.price = response.price;
+        }),
+      ).subscribe());
+    }
+    //console.log(portfolio.securities.map((security: Security) => security.symbol ));
+    //this.alphavantageService.getCurrencyExchange();
+
+    this.store.dispatch(new fromPortfolios.PortfolioEdited({  portfolio: portfolio }));
+    this.loadPortfolios();
   }
 }

@@ -19,7 +19,7 @@ export class AlphavantageService {
 
   constructor( private _http: HttpClient ) { }
 
-  public searchSymbol(symbol: string): Observable<any> {
+  public searchSymbol(symbol: string): Observable<AlphaVantageQuote[]> {
     return this._http.get(`${this.url}${this.searchFunction}&keywords=${symbol}${this.apiKey}`)
     .pipe(
       tap(console.log),
@@ -29,7 +29,7 @@ export class AlphavantageService {
     );
   }
 
-  public getQuoteForSymbol(symbol: string): Observable<any> {
+  public getQuoteForSymbol(symbol: string): Observable<AlphaVantageQuote> {
     return this._http.get(`${this.url}${this.quoteFunction}&symbol=${symbol}${this.apiKey}`)
     .pipe(
       tap(console.log),

@@ -30,9 +30,9 @@
           </ng-template>
           <td>{{ security.count }}</td>
           <td>{{ (security.count * security.usPrice) | currency}}</td>
-          <td class="text-center">
+          <td>
             <!-- <a (click)="onEdit(customer)" class="mr-2"><mdb-icon fas icon="edit"></mdb-icon></a> -->
-            <a (click)="onDelete(security)" class="text-center"><mdb-icon fas icon="trash"></mdb-icon></a>
+            <a (click)="onDelete(security)"><mdb-icon fas icon="trash"></mdb-icon></a>
           </td>
         </tr>
       </tbody>
