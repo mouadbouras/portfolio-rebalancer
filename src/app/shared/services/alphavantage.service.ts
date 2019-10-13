@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
-import { tap, map, filter } from 'rxjs/operators';
+import { map, filter } from 'rxjs/operators';
 import { AlphaVantageSecurity } from '../models/search-response.model';
 import { HttpClient } from '@angular/common/http';
 import { AlphaVantageQuote } from '../models/quote-response.model';
@@ -19,33 +19,27 @@ export class AlphavantageService {
 
   constructor( private _http: HttpClient ) { }
 
-  public searchSymbol(symbol: string): Observable<AlphaVantageQuote[]> {
+  public searchSymbol(symbol: string): Observable<AlphaVantageSecurity[]> {
     return this._http.get(`${this.url}${this.searchFunction}&keywords=${symbol}${this.apiKey}`)
     .pipe(
-      tap(console.log),
       filter((response: any) => !response['Note']),
       map((response: any) => this.responseToSecurities(response['bestMatches'])),
-      tap(console.log)
     );
   }
 
   public getQuoteForSymbol(symbol: string): Observable<AlphaVantageQuote> {
     return this._http.get(`${this.url}${this.quoteFunction}&symbol=${symbol}${this.apiKey}`)
     .pipe(
-      tap(console.log),
       filter((response: any) => !response['Note']),
       map((response: any) => this.responseToQuote(response['Global Quote'])),
-      tap(console.log)
     );
   }
 
   public getCurrencyExchange(fromCurrency: string, toCurrency: string): Observable<number> {
     return this._http.get(`${this.url}${this.exchangeFunction}&from_currency=${fromCurrency}&to_currency=${toCurrency}${this.apiKey}`)
     .pipe(
-      tap(console.log),
       filter((response: any) => !response['Note']),
       map((response: any) => response['Realtime Currency Exchange Rate']['5. Exchange Rate'] as number),
-      tap(console.log)
     );
   }
 

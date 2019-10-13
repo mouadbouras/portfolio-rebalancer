@@ -20,7 +20,6 @@ export class PortfolioService {
   }
 
   add(portfolio: Portfolio, userId: string) {
-    console.log(portfolio);
     const portfolios = this.db.list(`portfolios/${userId}`);
     return portfolios.push(portfolio);
   }

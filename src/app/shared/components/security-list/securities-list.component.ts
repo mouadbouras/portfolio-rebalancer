@@ -9,6 +9,7 @@ import { Security } from 'src/app/portfolios/model/security.model';
 export class SecuritiesListComponent implements OnInit {
   @Input() securities: Security[];
   @Input() editable: boolean = false;
+  @Input() showCount: boolean = true;
   @Output() deleteSecurity = new EventEmitter<Security>();
  
   constructor() { }

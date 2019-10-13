@@ -11,7 +11,7 @@ import * as fromPortfolios from './../store/portfolios.actions';
 import { ConfirmModalComponent } from '../../shared/components/confirm-modal/confirm-modal.component';
 import { PortfolioModalComponent } from '../../shared/components/portfolio-modal/portfolio-modal.component';
 import { AlphavantageService } from 'src/app/shared/services/alphavantage.service';
-import { AlphaVantageQuote } from 'src/app/shared/quote-response.model';
+import { AlphaVantageQuote } from '../../shared/models/quote-response.model';
 import { ExchangeRate } from '../model/exchange.model';
 import { Security } from '../model/security.model';
 
@@ -25,7 +25,6 @@ export class PortfoliosComponent implements OnInit, OnDestroy {
   isLoading$: Observable<boolean>;
   modalRef: MDBModalRef;
   currencyExchange: { [key: string]: ExchangeRate};
-  rates: {[key: string]: Observable<any>};
   rebalanceSubscriptions: SubscriptionLike[];
   refreshSubscriptions: SubscriptionLike[];
 
@@ -45,7 +44,6 @@ export class PortfoliosComponent implements OnInit, OnDestroy {
     this.currencyExchange = {};
     this.rebalanceSubscriptions = [];
     this.refreshSubscriptions = [];
-    this.rates = {};
   }
 
   ngOnDestroy(): void {
@@ -122,24 +120,6 @@ export class PortfoliosComponent implements OnInit, OnDestroy {
     this.store.dispatch(new fromPortfolios.PortfolioEdited({ portfolio: portfolio }));
   }
 
-  onPortfolioRebalance(portfolio: Portfolio) {
-    if (portfolio && portfolio.securities) {
-    //   for (const security of portfolio.securities) {
-    //     if (security.currency && !this.rates[security.currency]) {
-    //       this.rates[security.currency] = this.alphavantageService.getCurrencyExchange(security.currency, 'USD');
-    //     }
-    //   }
-
-    //   this.subscriptions.push(forkJoin(this.rates).pipe(
-    //     tap(console.log),
-    //     tap(rates => {
-    //       this.rebalancePortfolio(portfolio, rates);
-    //     })
-    //   ).subscribe());
-    this.refreshPortfolio(portfolio);
-    }
-  }
-
   onPortfolioDeleteSecurity(event: any) {
     this.modalRef = this.modalService.show(ConfirmModalComponent, this.modalConfig);
 
@@ -149,33 +129,69 @@ export class PortfoliosComponent implements OnInit, OnDestroy {
         portfolio.securities = portfolio.securities.filter((v: Security) => v !== event.security);
         this.store.dispatch(new fromPortfolios.PortfolioEdited({ portfolio }));
       }
-    });  }
-
-  rebalancePortfolio(portfolio: Portfolio, rates: {[key: string]: number}) {
-    const portfolioCopy = JSON.parse(JSON.stringify(portfolio));
-    for (const security of portfolioCopy.securities) {
-      security.usPrice = security.price  * rates[security.currency];
-      security.count = Math.floor(
-        ((security.percentage as number / 100) * portfolioCopy.investment as number) / (security.usPrice as number)
-      );
-    }
-
-    this.store.dispatch(new fromPortfolios.PortfolioEdited({ portfolio: portfolioCopy }));
+    });  
   }
 
-  refreshPortfolio(portfolio: Portfolio) {
-    //const portfolioCopy = JSON.parse(JSON.stringify(portfolio));
-    for (const security of portfolio.securities) {
-      this.refreshSubscriptions.push(this.alphavantageService.getQuoteForSymbol(security.symbol).pipe(
-        tap((response: AlphaVantageQuote) => {
-          security.price = response.price;
-        }),
+  onPortfolioRebalance(portfolio: Portfolio) {
+    if (portfolio && portfolio.securities) {
+      const prices: {[key: string]: Observable<any>} = {};
+
+      for (const security of portfolio.securities) {
+        if (!prices['C-' + security.currency] ) {
+          prices['C-' + security.currency] = this.alphavantageService.getCurrencyExchange(security.currency, 'USD');
+        }
+
+        if (!prices['S-' + security.symbol]) {
+          prices['S-' + security.symbol] = this.alphavantageService.getQuoteForSymbol(security.symbol).pipe(
+            map((response: AlphaVantageQuote) => response.price)
+          );
+        }
+      }
+
+      this.rebalanceSubscriptions.push(forkJoin(prices).pipe(
+        tap(prices => {
+          this.refreshAndRebalancePortfolio(portfolio, prices);
+        })
       ).subscribe());
     }
-    //console.log(portfolio.securities.map((security: Security) => security.symbol ));
-    //this.alphavantageService.getCurrencyExchange();
+  }
 
+  refreshAndRebalancePortfolio(portfolio: Portfolio, prices: {[key: string]: number}) {
+    console.log(prices);
+    for (const security of portfolio.securities) {
+      security.price = prices['S-'  + security.symbol];
+      security.usPrice = security.price * prices['C-' + security.currency];
+      security.count = Math.floor(
+        ((security.percentage as number / 100) * portfolio.investment as number) / (security.usPrice as number)
+      );
+
+    }
     this.store.dispatch(new fromPortfolios.PortfolioEdited({  portfolio: portfolio }));
     this.loadPortfolios();
   }
+
+  onRefreshPortfolio(portfolio: Portfolio) {
+    const prices: {[key: string]: Observable<string>} = {} ;
+    for (const security of portfolio.securities) {
+      prices[security.symbol] = this.alphavantageService.getQuoteForSymbol(security.symbol).pipe(
+        map((response: AlphaVantageQuote) => response.price)
+      );
+    }
+
+    this.refreshSubscriptions.push(forkJoin(prices).pipe(
+      //tap(console.log),
+      tap(prices => {
+        this.refreshPortfolio(portfolio, prices);
+      })
+    ).subscribe());
+  }
+
+  refreshPortfolio(portfolio: Portfolio, prices: {[key: string]: number}) {
+    for (const security of portfolio.securities) {
+      security.price = prices[security.symbol];
+    }
+    this.store.dispatch(new fromPortfolios.PortfolioEdited({  portfolio: portfolio }));
+    this.loadPortfolios();
+  }
+
 }

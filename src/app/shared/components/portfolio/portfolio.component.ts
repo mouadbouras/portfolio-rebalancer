@@ -63,9 +63,6 @@ export class PortfolioComponent implements OnInit, OnChanges {
       this.overHunderPercentValue = this.portfolio.securities.map(
         security => security.percentage as number
         ).reduce((a: number, b: number) => (a * 1) + (b * 1) , 0);
-        console.log(this.portfolio.securities.map(
-          security => security.percentage as number
-          ));
         this.overHunderPercentFlag = this.overHunderPercentValue ? this.overHunderPercentValue > 100 : false;
     }
   }

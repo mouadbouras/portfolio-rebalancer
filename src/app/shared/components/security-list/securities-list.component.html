@@ -8,8 +8,8 @@
           <th>Currency</th>
           <th>USD</th>
           <th>Percent</th>
-          <th>Count</th>
-          <th>$ Equivalent</th>
+          <th *ngIf="showCount">Count</th>
+          <th *ngIf="showCount">Value</th>
           <th>Actions</th>
         </tr>
       </thead>
@@ -28,8 +28,8 @@
                      [(ngModel)]="security.percentage" mdbInput  #name="ngModel" required>
             </td>
           </ng-template>
-          <td>{{ security.count }}</td>
-          <td>{{ (security.count * security.usPrice) | currency}}</td>
+          <td *ngIf="showCount">{{ security.count }}</td>
+          <td *ngIf="showCount">{{ (security.count * security.usPrice) | currency}}</td>
           <td>
             <!-- <a (click)="onEdit(customer)" class="mr-2"><mdb-icon fas icon="edit"></mdb-icon></a> -->
             <a (click)="onDelete(security)"><mdb-icon fas icon="trash"></mdb-icon></a>
