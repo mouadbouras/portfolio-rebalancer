@@ -19,6 +19,7 @@ import { PortfolioListComponent } from './components/portfolio-list/portfolio-li
 import { PortfolioModalComponent } from './components/portfolio-modal/portfolio-modal.component';
 import { SecuritiesListComponent } from './components/security-list/securities-list.component';
 import { SearchComponent } from './components/search/search.component';
+import { AddCashModalComponent } from './components/add-cash-modal/add-cash-modal.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { SearchComponent } from './components/search/search.component';
     PortfolioListComponent,
     PortfolioModalComponent,
     SecuritiesListComponent,
-    SearchComponent
+    SearchComponent,
+    AddCashModalComponent
   ],
   imports: [
     CommonModule,

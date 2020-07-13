@@ -1,0 +1,33 @@
+<div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+        <span aria-hidden="true">×</span>
+      </button>
+      <h4 class="modal-title w-200" id="myModalLabel">{{ heading }}</h4>
+    </div>
+    <div class="modal-body">
+      <form #addCashForm="ngForm">
+
+        <div class="md-form">
+          <!-- <input type="text" id="investment" class="form-control" name="investment" [(ngModel)]="portfolio.investment" mdbInput mdbValidate [validateSuccess]="false" #investment="ngModel" required> -->
+          <div class="md-form input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text md-addon">$</span>
+            </div>
+            <input type="number" id="cash" placeholder="Amout" class="form-control" name="cash" [(ngModel)]="cash" mdbInput mdbValidate [validateSuccess]="false" #investment="ngModel" required>
+            <div class="input-group-append">
+              <span class="input-group-text md-addon">.00</span>
+            </div>
+          </div>
+          <mdb-error *ngIf="cash && cash.invalid && (cash.dirty || cash.touched)">Amout is required</mdb-error>
+        </div>
+  
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" mdbBtn color="white" class="black-text waves-light" aria-label="Close" (click)="modalRef.hide()"
+        mdbWavesEffect>Close</button>
+      <button type="button" mdbBtn color="primary" class="relative waves-light" mdbWavesEffect (click)="onSave()">Save!</button>
+    </div>
+  </div>
+  
